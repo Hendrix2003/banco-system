@@ -1,0 +1,49 @@
+# Compilados
+**/target/
+**/dist/
+**/build/
+**/out/
+**/bin/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.factorypath
+
+# Node / Angular
+**/node_modules/
+**/.angular/
+**/out-tsc/
+**/.nx/
+*.log
+npm-debug.log*
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Variables locales
+.env
+.env.local
+.env.*.local
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~
+
+# Coverage
+coverage/
+*.lcov

@@ -1,0 +1,123 @@
+<h2 class="page-title">Clientes</h2>
+
+<div *ngIf="errorMsg" class="alert alert-error">{{ errorMsg }}</div>
+<div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>
+
+<div class="toolbar">
+  <input class="search-box" placeholder="Buscar" [(ngModel)]="filtro" [ngModelOptions]="{standalone: true}" />
+  <button class="btn btn-new" (click)="abrirNuevo()">Nuevo</button>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Identificacion</th>
+        <th>Genero</th>
+        <th>Edad</th>
+        <th>Telefono</th>
+        <th>ClienteId</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of clientesFiltrados">
+        <td>{{ c.id }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.identificacion }}</td>
+        <td>{{ c.genero }}</td>
+        <td>{{ c.edad }}</td>
+        <td>{{ c.telefono }}</td>
+        <td>{{ c.clienteId }}</td>
+        <td>
+          <span class="badge" [class.badge-success]="c.estado" [class.badge-muted]="!c.estado">
+            {{ c.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td class="col-actions">
+          <button class="btn btn-edit" (click)="abrirEditar(c)">Editar</button>
+          <button class="btn btn-danger" (click)="eliminar(c)">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="loading">
+        <td colspan="9" class="loading-row">
+          <span class="spinner"></span> Cargando...
+        </td>
+      </tr>
+      <tr *ngIf="clientesFiltrados.length === 0 && !loading">
+        <td colspan="9" class="empty">No hay clientes</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-overlay" *ngIf="showForm">
+  <div class="modal">
+    <div class="modal-header">
+      <span>{{ editando ? 'Editar Cliente' : 'Nuevo Cliente' }}</span>
+      <button type="button" class="btn-close" (click)="cerrarForm()" aria-label="Cerrar">&times;</button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" formControlName="nombre" />
+          <div class="form-error" *ngIf="esInvalido('nombre')">Nombre obligatorio</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Identificacion</label>
+            <input type="text" formControlName="identificacion" />
+            <div class="form-error" *ngIf="esInvalido('identificacion')">Identificacion obligatoria</div>
+          </div>
+          <div class="form-group">
+            <label>Genero</label>
+            <select formControlName="genero">
+              <option value="">--</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Edad</label>
+            <input type="number" formControlName="edad" />
+          </div>
+          <div class="form-group">
+            <label>Telefono</label>
+            <input type="text" formControlName="telefono" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Direccion</label>
+          <input type="text" formControlName="direccion" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ClienteId</label>
+            <input type="text" formControlName="clienteId" />
+            <div class="form-error" *ngIf="esInvalido('clienteId')">ClienteId obligatorio</div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" formControlName="password" />
+            <div class="form-error" *ngIf="esInvalido('password')">Minimo 4 caracteres</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" formControlName="estado" /> Activo
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarForm()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

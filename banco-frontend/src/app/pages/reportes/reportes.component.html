@@ -1,0 +1,73 @@
+<h2 class="page-title">Reportes</h2>
+
+<div *ngIf="errorMsg" class="alert alert-error">{{ errorMsg }}</div>
+
+<div class="report-filters">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Cliente</label>
+        <select formControlName="cliente">
+          <option value="">-- Seleccione --</option>
+          <option *ngFor="let c of clientes" [value]="c.clienteId">
+            {{ c.nombre }} ({{ c.clienteId }})
+          </option>
+        </select>
+        <div class="form-error" *ngIf="esInvalido('cliente')">Cliente obligatorio</div>
+      </div>
+      <div class="form-group">
+        <label>Fecha Inicio</label>
+        <input type="date" formControlName="fechaInicio" />
+        <div class="form-error" *ngIf="esInvalido('fechaInicio')">Fecha inicio obligatoria</div>
+      </div>
+      <div class="form-group">
+        <label>Fecha Fin</label>
+        <input type="date" formControlName="fechaFin" />
+        <div class="form-error" *ngIf="esInvalido('fechaFin')">Fecha fin obligatoria</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button type="button" class="btn btn-primary" (click)="consultar()">Consultar</button>
+      <button type="button" class="btn btn-new" (click)="descargarPdf()">Descargar PDF</button>
+      <button type="button" class="btn btn-secondary" (click)="limpiar()">Limpiar</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Numero Cuenta</th>
+        <th>Tipo</th>
+        <th class="text-right col-num">Saldo Inicial</th>
+        <th>Estado</th>
+        <th class="text-right col-num">Movimiento</th>
+        <th class="text-right col-num">Saldo Disponible</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of resultados">
+        <td>{{ r.Fecha }}</td>
+        <td>{{ r.Cliente }}</td>
+        <td>{{ r.NumeroCuenta }}</td>
+        <td>{{ r.Tipo }}</td>
+        <td class="text-right col-num">{{ r.SaldoInicial | number:'1.2-2' }}</td>
+        <td>
+          <span class="badge" [class.badge-success]="r.Estado" [class.badge-muted]="!r.Estado">
+            {{ r.Estado ? 'True' : 'False' }}
+          </span>
+        </td>
+        <td class="text-right col-num" [class.text-positive]="r.Movimiento > 0" [class.text-negative]="r.Movimiento < 0">
+          {{ r.Movimiento | number:'1.2-2' }}
+        </td>
+        <td class="text-right col-num">{{ r.SaldoDisponible | number:'1.2-2' }}</td>
+      </tr>
+      <tr *ngIf="resultados.length === 0 && !loading">
+        <td colspan="8" class="empty">Sin resultados</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

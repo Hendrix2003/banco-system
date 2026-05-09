@@ -1,0 +1,382 @@
+{
+  "info": {
+    "name": "Banco API",
+    "_postman_id": "1f4a3e2d-1234-4abc-9876-abcdef012345",
+    "description": "Coleccion de endpoints sistema bancario. Cada request trae data lista para probar contra los datos precargados en BaseDatos.sql.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" }
+  ],
+  "item": [
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Listar clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["clientes"]
+            }
+          }
+        },
+        {
+          "name": "Obtener cliente por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["clientes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear cliente",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["clientes"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ana Rodriguez\",\n  \"genero\": \"F\",\n  \"edad\": 29,\n  \"identificacion\": \"00198765432\",\n  \"direccion\": \"Gazcue, Santo Domingo\",\n  \"telefono\": \"8095554444\",\n  \"clienteId\": \"arodriguez\",\n  \"password\": \"1234\",\n  \"estado\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Actualizar cliente",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["clientes", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pedro Martinez\",\n  \"genero\": \"M\",\n  \"edad\": 29,\n  \"identificacion\": \"00112345678\",\n  \"direccion\": \"Los Mina, Santo Domingo Este\",\n  \"telefono\": \"8095551111\",\n  \"clienteId\": \"Pmartinez\",\n  \"estado\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear cliente (validacion: sin nombre)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["clientes"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificacion\": \"99999999999\",\n  \"clienteId\": \"test\",\n  \"password\": \"1234\"\n}"
+            },
+            "description": "Debe responder 400 - nombre obligatorio"
+          }
+        },
+        {
+          "name": "Eliminar cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clientes/3",
+              "host": ["{{baseUrl}}"],
+              "path": ["clientes", "3"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cuentas",
+      "item": [
+        {
+          "name": "Listar cuentas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cuentas",
+              "host": ["{{baseUrl}}"],
+              "path": ["cuentas"]
+            }
+          }
+        },
+        {
+          "name": "Obtener cuenta por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cuentas/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["cuentas", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear cuenta",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/cuentas",
+              "host": ["{{baseUrl}}"],
+              "path": ["cuentas"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"100005\",\n  \"tipoCuenta\": \"Ahorros\",\n  \"saldoInicial\": 800.00,\n  \"estado\": true,\n  \"clienteId\": \"mlopez\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Actualizar cuenta",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/cuentas/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["cuentas", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"100001\",\n  \"tipoCuenta\": \"Corriente\",\n  \"saldoInicial\": 1500.00,\n  \"estado\": true,\n  \"clienteId\": \"Pmartinez\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar cuenta",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cuentas/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["cuentas", "4"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movimientos",
+      "item": [
+        {
+          "name": "Listar movimientos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos"]
+            }
+          }
+        },
+        {
+          "name": "Obtener movimiento por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear deposito",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"100001\",\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 500.00\n}"
+            },
+            "description": "Cuenta 100001 (Pedro) tiene saldo inicial 1500. Despues del deposito: 2000."
+          }
+        },
+        {
+          "name": "Crear retiro",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"100002\",\n  \"tipoMovimiento\": \"RETIRO\",\n  \"valor\": 200.00\n}"
+            },
+            "description": "Cuenta 100002 (Pedro) tiene saldo inicial 3200. Despues del retiro: 3000."
+          }
+        },
+        {
+          "name": "Retiro sin saldo (debe fallar)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"100001\",\n  \"tipoMovimiento\": \"RETIRO\",\n  \"valor\": 99999.00\n}"
+            },
+            "description": "Debe responder 400 con mensaje 'Saldo no disponible'."
+          }
+        },
+        {
+          "name": "Retiro excede cupo diario (debe fallar)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"100003\",\n  \"tipoMovimiento\": \"RETIRO\",\n  \"valor\": 1500.00\n}"
+            },
+            "description": "Cupo diario es 1000. Un retiro de 1500 debe responder 400 'Cupo diario excedido'."
+          }
+        },
+        {
+          "name": "Actualizar movimiento",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"100001\",\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 750.00\n}"
+            },
+            "description": "Al actualizar, el sistema recalcula los saldos posteriores de la cuenta."
+          }
+        },
+        {
+          "name": "Eliminar movimiento",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movimientos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["movimientos", "1"]
+            },
+            "description": "Al eliminar, el sistema recalcula los saldos restantes de la cuenta."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Reporte JSON - Pedro Martinez",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reportes?cliente=Pmartinez&fechaInicio=2024-01-01&fechaFin=2030-12-31&formato=json",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes"],
+              "query": [
+                { "key": "cliente", "value": "Pmartinez" },
+                { "key": "fechaInicio", "value": "2024-01-01" },
+                { "key": "fechaFin", "value": "2030-12-31" },
+                { "key": "formato", "value": "json" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reporte JSON - Maria Lopez",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reportes?cliente=mlopez&fechaInicio=2024-01-01&fechaFin=2030-12-31&formato=json",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes"],
+              "query": [
+                { "key": "cliente", "value": "mlopez" },
+                { "key": "fechaInicio", "value": "2024-01-01" },
+                { "key": "fechaFin", "value": "2030-12-31" },
+                { "key": "formato", "value": "json" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reporte PDF (Base64)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reportes?cliente=Pmartinez&fechaInicio=2024-01-01&fechaFin=2030-12-31&formato=pdf",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes"],
+              "query": [
+                { "key": "cliente", "value": "Pmartinez" },
+                { "key": "fechaInicio", "value": "2024-01-01" },
+                { "key": "fechaFin", "value": "2030-12-31" },
+                { "key": "formato", "value": "pdf" }
+              ]
+            },
+            "description": "El campo pdfBase64 viene con el PDF codificado. Se puede decodificar y guardar como archivo."
+          }
+        },
+        {
+          "name": "Reporte cliente inexistente (debe fallar)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reportes?cliente=noexiste&fechaInicio=2024-01-01&fechaFin=2030-12-31&formato=json",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes"],
+              "query": [
+                { "key": "cliente", "value": "noexiste" },
+                { "key": "fechaInicio", "value": "2024-01-01" },
+                { "key": "fechaFin", "value": "2030-12-31" },
+                { "key": "formato", "value": "json" }
+              ]
+            },
+            "description": "Debe responder 404 'Cliente no encontrado'."
+          }
+        }
+      ]
+    }
+  ]
+}

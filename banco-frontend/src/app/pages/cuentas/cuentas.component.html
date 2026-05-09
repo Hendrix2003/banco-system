@@ -1,0 +1,99 @@
+<h2 class="page-title">Cuentas</h2>
+
+<div *ngIf="errorMsg" class="alert alert-error">{{ errorMsg }}</div>
+<div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>
+
+<div class="toolbar">
+  <input class="search-box" placeholder="Buscar" [(ngModel)]="filtro" [ngModelOptions]="{standalone: true}" />
+  <button class="btn btn-new" (click)="abrirNuevo()">Nuevo</button>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Numero</th>
+        <th>Tipo</th>
+        <th class="text-right col-num">Saldo Inicial</th>
+        <th class="text-right col-num">Saldo Actual</th>
+        <th>Cliente</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of cuentasFiltradas">
+        <td>{{ c.id }}</td>
+        <td>{{ c.numeroCuenta }}</td>
+        <td>{{ c.tipoCuenta }}</td>
+        <td class="text-right col-num">{{ c.saldoInicial | number:'1.2-2' }}</td>
+        <td class="text-right col-num"><strong>{{ saldoActualDe(c.numeroCuenta) | number:'1.2-2' }}</strong></td>
+        <td>{{ c.nombreCliente }} ({{ c.clienteId }})</td>
+        <td>
+          <span class="badge" [class.badge-success]="c.estado" [class.badge-muted]="!c.estado">
+            {{ c.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td class="col-actions">
+          <button class="btn btn-edit" (click)="abrirEditar(c)">Editar</button>
+          <button class="btn btn-danger" (click)="eliminar(c)">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="cuentasFiltradas.length === 0">
+        <td colspan="8" class="empty">No hay cuentas</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-overlay" *ngIf="showForm">
+  <div class="modal">
+    <div class="modal-header">
+      <span>{{ editando ? 'Editar Cuenta' : 'Nueva Cuenta' }}</span>
+      <button type="button" class="btn-close" (click)="cerrarForm()" aria-label="Cerrar">&times;</button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Numero de cuenta</label>
+          <input type="text" formControlName="numeroCuenta" />
+          <div class="form-error" *ngIf="esInvalido('numeroCuenta')">Numero obligatorio</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tipo</label>
+            <select formControlName="tipoCuenta">
+              <option value="Ahorros">Ahorros</option>
+              <option value="Corriente">Corriente</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Saldo Inicial</label>
+            <input type="number" step="0.01" formControlName="saldoInicial" />
+            <div class="form-error" *ngIf="esInvalido('saldoInicial')">Saldo invalido</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Cliente</label>
+          <select formControlName="clienteId">
+            <option value="">-- Seleccione --</option>
+            <option *ngFor="let cli of clientes" [value]="cli.clienteId">
+              {{ cli.nombre }} ({{ cli.clienteId }})
+            </option>
+          </select>
+          <div class="form-error" *ngIf="esInvalido('clienteId')">Cliente obligatorio</div>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" formControlName="estado" /> Activa
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarForm()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

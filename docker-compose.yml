@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: banco-db
+    environment:
+      POSTGRES_DB: banco
+      POSTGRES_USER: banco
+      POSTGRES_PASSWORD: banco123
+    ports:
+      - "5432:5432"
+    volumes:
+      - banco-data:/var/lib/postgresql/data
+      - ./BaseDatos.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banco -d banco"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./banco-backend
+    container_name: banco-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: banco
+      DB_USER: banco
+      DB_PASSWORD: banco123
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./banco-frontend
+    container_name: banco-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  banco-data:
